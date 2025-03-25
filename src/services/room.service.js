@@ -1,4 +1,4 @@
-const { Room } = require('../models/room');
+const Room = require('../models/room');
 
 async function findByName(name) {
   return Room.findOne({
@@ -12,49 +12,18 @@ async function findById(id) {
   });
 }
 
-async function getAllRooms() {
-  return Room.findAll();
-}
-
-async function createRoom(name) {
-  const room = await findByName(name);
-
-  if (room) {
-    throw Error('Room already exist');
-  }
-
-  await Room.create({
-    name,
-  });
-}
-
 async function removeRoom(id) {
-  const room = findById(id);
-
-  if (!room) {
-    throw Error('Room not found');
-  }
-
-  await Room.destroy({
-    where: { id },
-  });
-}
-
-async function changeRoom(id, newName) {
   const room = await findById(id);
 
   if (!room) {
-    throw Error('Room not found');
+    throw new Error('Room not found');
   }
 
-  room.name = newName;
-  await room.save();
+  await room.destroy();
 }
 
 module.exports = {
-  createRoom,
   findByName,
-  getAllRooms,
-  changeRoom,
+  findById,
   removeRoom,
 };

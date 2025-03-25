@@ -1,20 +1,11 @@
-const { User } = require('../models/user');
+const User = require('../models/user');
 
-function findById(id) {
-  return User.find({
+async function findById(id) {
+  return User.findOne({
     where: { id },
   });
 }
 
-async function registerUser(name) {
-  const user = await User.create({
-    name,
-  });
-
-  return user;
-}
-
 module.exports = {
-  registerUser,
   findById,
 };

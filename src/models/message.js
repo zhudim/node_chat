@@ -1,21 +1,19 @@
-const { DataTypes } = require('sequelize');
-const { client } = require('../utils/db.js');
-const { User } = require('./user.js');
-const { Room } = require('./room.js');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize('sqlite::memory:');
+const User = require('./user');
+const Room = require('./room');
 
-const Message = client.define('message', {
-  text: {
+const Message = sequelize.define('Message', {
+  content: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 });
 
 Message.belongsTo(User);
-User.hasOne(Message);
+User.hasMany(Message); // Changed from User.hasOne(Message)
 
 Message.belongsTo(Room);
-Room.hasOne(Message);
+Room.hasMany(Message); // Changed from Room.hasOne(Message)
 
-module.exports = {
-  Message,
-};
+module.exports = Message;
